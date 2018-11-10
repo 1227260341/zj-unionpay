@@ -1,0 +1,11 @@
+server:
+  port: 9999
+spring:
+  application:
+    name: zj-unionpay
+  
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/zj_websocket?characterEncoding=utf-8
+    username: root
+    password: root
