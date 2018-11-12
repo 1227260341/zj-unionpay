@@ -1,0 +1,133 @@
+
+<!doctype html>
+<html lang="en">
+
+<!-- 
+
+  借地写说明：
+  jquery-ui的说明参考：http://www.runoob.com/jqueryui/jqueryui-tutorial.html
+  jquery的说明参考：http://www.w3school.com.cn/jquery/index.asp
+  
+  tabs-api为横向的标签，下面定义的div比如tabs-purchase是竖向的标签，按已有的往下添加，名字别重复就行。
+  
+  新增横向标签：
+  1. <div id="tabs-api"><ul><li>下面新加个a标签，指向一个锚点。
+  2. 上一条的<ul>同级别下新加一个<div>，id使用上一条锚点指定的id。
+  
+  新增纵向标签：
+  1. js加一行，设置纵向标签的参数。
+  2. 总之参考已有的样例吧。
+  
+ 缴费的页面需要分开写，因为如果放一起写页面工作会不正常，暂时不了解原因。
+  
+-->
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>网关支付产品示例</title>
+  <link rel="stylesheet" href="static/jquery-ui.min.css">
+  <script src="static/jquery-1.11.2.min.js"></script>
+  <script src="static/jquery-ui.min.js"></script>
+  <script src="static/demo.js"></script>
+  <script>
+  	$(function() {
+	    setApiDemoTabs("#tabs-purchase");
+	    setApiDemoTabs("#tabs-preauth");
+	  });
+  </script>
+  <link rel="stylesheet" href="static/demo.css">
+</head>
+
+<body style="background-color:#e5eecc;">
+<div id="wrapper">
+<div id="header">
+<h2>网关支付产品示例</h2>
+
+</div>
+
+<div id="tabs-api">
+  <ul>
+    <li><a href="#tabs-api-1">前言</a></li>
+    <li><a href="#tabs-api-2">消费样例</a></li>
+    <li><a href="#tabs-api-4">预授权样例</a></li>
+    <li><a href="#tabs-api-3">常见开发问题</a></li>
+  </ul>
+  
+  <div id="tabs-api-1">
+    <jsp:include  page="/pages/introduction.jsp"/>
+  </div>
+
+  <div id="tabs-api-2">
+	<div id="tabs-purchase">
+	  <ul>
+	    <li><a href="#tabs-purchase-1">说明</a></li>
+	    <li><a href="pages/consume.jsp">消费</a></li>
+	    <li><a href="pages/consumeUndo.jsp">消费撤销</a></li>
+	    <li><a href="pages/refund.jsp">退货</a></li>
+		<li><a href="pages/query.jsp">交易状态查询</a></li>
+		<li><a href="pages/file_transfer.jsp">对账文件下载</a></li>
+	  </ul>
+	  <div id="tabs-purchase-1">
+	     <jsp:include  page="/pages/consume_intro.jsp"/>
+	  </div>
+	</div>
+  </div>
+
+  <div id="tabs-api-4">
+	<div id="tabs-preauth">
+	  <ul>
+	    <li><a href="#tabs-preauth-1">说明</a></li>
+	    <li><a href="pages/preauth.jsp">预授权</a></li>
+	    <li><a href="pages/preauthFinish.jsp">预授权完成</a></li>
+	    <li><a href="pages/preauthUndo.jsp">预授权撤销</a></li>
+	    <li><a href="pages/preauthFinishUndo.jsp">预授权完成撤销</a></li>
+		<li><a href="pages/query.jsp">交易状态查询</a></li>
+		<li><a href="pages/file_transfer.jsp">对账文件下载</a></li>
+	  </ul>
+	  <div id="tabs-preauth-1">
+	     <jsp:include  page="/pages/preauth_intro.jsp"/>
+	  </div>
+	</div>
+  </div>
+
+  <div id="tabs-api-3">
+    <jsp:include  page="/pages/devlopHelp.jsp"/>
+  </div>
+  
+  
+  
+  <form class="api-form" method="post" action="/consumer/pay" target="_blank">
+<p>
+<label>商户号：</label>
+<input id="merId" type="text" name="merId" placeholder="" value="777290058110048" title="商户号码（商户号码777290058110097仅做为测试调通交易使用，该商户号配置了需要对敏感信息加密）测试时请改成自己申请的商户号，【自己注册的测试777开头的商户号不支持代收产品】" required="required"/>
+</p>
+<p>
+<label>交易金额：</label>
+<input id="txnAmt" type="text" name="txnAmt" placeholder="交易金额" value="1" title="单位为分,不能带小数点 " required="required"/>
+</p>
+<p>
+<label>订单发送时间：</label>
+<input id="txnTime" type="text" name="txnTime" placeholder="订单发送时间，YYYYMMDDhhmmss格式" value="20181110152626" title="取北京时间,，YYYYMMDDhhmmss格式" required="required"/>
+</p>
+<p>
+<label>商户订单号：</label>
+<input id="orderId" type="text" name="orderId" placeholder="商户订单号" value="20181110152626" title="自行定义，8-32位数字字母 " required="required"/>
+</p>
+<p>
+<label>&nbsp;</label>
+<input type="submit" class="button" value="提交" />
+<input type="button" class="showFaqBtn" value="遇到问题？" />
+</p>
+</form>
+  
+  
+  
+  
+  
+	  
+  </div> <!-- end of tabs-api-->
+</div><!-- end of wrapper-->
+ 
+ 
+</body>
+</html>
