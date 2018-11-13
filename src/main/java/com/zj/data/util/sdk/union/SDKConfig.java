@@ -22,6 +22,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.springframework.util.ResourceUtils;
+
+
 /**
  * 
  * @ClassName SDKConfig
@@ -293,6 +296,37 @@ public class SDKConfig {
 			}
 		}
 	}
+	
+	public void loadPropertiesFromSrc1() {
+		InputStream in = null;
+		try {
+			in = new SDKConfig().getClass().getResourceAsStream("/" + FILE_NAME);
+//			LogUtil.writeLog("从classpath: " +SDKConfig.class.getClassLoader().getResource("").getPath()+" 获取属性文件"+FILE_NAME);
+//			in = SDKConfig.class.getClassLoader().getResourceAsStream(FILE_NAME);
+			if (null != in) {
+				properties = new Properties();
+				try {
+					properties.load(in);
+				} catch (IOException e) {
+					throw e;
+				}
+			} else {
+				LogUtil.writeErrorLog(FILE_NAME + "属性文件未能在classpath指定的目录下 "+SDKConfig.class.getClassLoader().getResource("").getPath()+" 找到!");
+				return;
+			}
+			loadProperties(properties);
+		} catch (IOException e) {
+			LogUtil.writeErrorLog(e.getMessage(), e);
+		} finally {
+			if (null != in) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					LogUtil.writeErrorLog(e.getMessage(), e);
+				}
+			}
+		}
+	}
 
 	/**
 	 * 根据传入的 {@link #load(java.util.Properties)}对象设置配置参数
@@ -304,8 +338,15 @@ public class SDKConfig {
 		String value = null;
 		
 		value = pro.getProperty(SDK_SIGNCERT_PATH);
+		String classPath = "";
+		try {
+			classPath = ResourceUtils.getURL("classpath:").getPath();
+			LogUtil.writeLog("classPath 地址==>"+"==>"+ classPath);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		if (!SDKUtil.isEmpty(value)) {
-			this.signCertPath = value.trim();
+			this.signCertPath = classPath + value.trim();
 			LogUtil.writeLog("配置项：私钥签名证书路径==>"+SDK_SIGNCERT_PATH +"==>"+ value+" 已加载");
 		}
 		value = pro.getProperty(SDK_SIGNCERT_PWD);
@@ -320,7 +361,7 @@ public class SDKConfig {
 		}
 		value = pro.getProperty(SDK_ENCRYPTCERT_PATH);
 		if (!SDKUtil.isEmpty(value)) {
-			this.encryptCertPath = value.trim();
+			this.encryptCertPath = classPath + value.trim();
 			LogUtil.writeLog("配置项：敏感信息加密证书==>"+SDK_ENCRYPTCERT_PATH +"==>"+ value+" 已加载");
 		}
 		value = pro.getProperty(SDK_VALIDATECERT_DIR);
@@ -371,11 +412,11 @@ public class SDKConfig {
 		}
 		value = pro.getProperty(SDK_ROOTCERT_PATH);
 		if (!SDKUtil.isEmpty(value)) {
-			this.rootCertPath = value.trim();
+			this.rootCertPath = classPath + value.trim();
 		}
 		value = pro.getProperty(SDK_MIDDLECERT_PATH);
 		if (!SDKUtil.isEmpty(value)) {
-			this.middleCertPath = value.trim();
+			this.middleCertPath = classPath + value.trim();
 		}
 
 		/**缴费部分**/
